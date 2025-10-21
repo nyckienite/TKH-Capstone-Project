@@ -8,8 +8,8 @@ Features:
 - Three personas: Educator, Learner, Employer
 - Beginner-friendly tools (project brief, rubric, study plan, scorecard, etc.)
 - Simple CLI:
-    python notebook_agent.py --persona learner --ask "Give me a 2-week Docker+CI plan"
-    python notebook_agent.py --tool propose_project --args '{"topic":"Model Monitoring","duration_weeks":2}'
+    python agent.py --persona learner --ask "Give me a 2-week Docker+CI plan"
+    python agent.py --tool propose_project --args '{"topic":"Model Monitoring","duration_weeks":2}'
 """
 
 from __future__ import annotations
@@ -107,9 +107,9 @@ EDUCATOR = Persona(
         "Bring real-world projects into curriculum",
         "Map outcomes to industry tools (cloud, Git, MLOps, advanced AI)",
     ],
-    tone="warm, practical, coach-like",
-    style_rules=["use checklists", "include rubrics", "be concise"],
-    tools_allowed=["propose_project", "make_rubric", "map_outcomes_to_tools"],
+    tone="Warm, Practical, Coach-Like",
+    style_rules=["Use Checklists", "Include Rubrics", "Be Concise"],
+    tools_allowed=["Propose_Project", "Make_Rubric", "Map_Outcomes_to_Tools"],
 )
 
 LEARNER = Persona(
@@ -118,9 +118,9 @@ LEARNER = Persona(
         "Sharpen practical skills in cloud, Git, MLOps, advanced AI",
         "Create personal practice plans",
     ],
-    tone="encouraging, direct",
-    style_rules=["show commands", "weekly plan", "include checkpoints"],
-    tools_allowed=["skills_gap", "study_plan", "checkpoint_quiz"],
+    tone="Encouraging, Direct",
+    style_rules=["Show Commands", "Weekly Plan", "Include Checkpoints"],
+    tools_allowed=["Skills_Gap", "Study_Plan", "Checkpoint_Quiz"],
 )
 
 EMPLOYER = Persona(
@@ -129,9 +129,9 @@ EMPLOYER = Persona(
         "Align pipelines with training programs",
         "Define job-ready skills and scorecards",
     ],
-    tone="succinct, metrics-driven",
-    style_rules=["bullets", "KPIs", "templates that scale"],
-    tools_allowed=["role_matrix", "assignment_brief", "screening_scorecard"],
+    tone="Succinct, Metrics-Driven",
+    style_rules=["Bullets", "KPIs", "Templates That Scale"],
+    tools_allowed=["Role_Matrix", "Assignment_Brief", "Screening_Scorecard"],
 )
 
 PERSONAS: Dict[str, Persona] = {
