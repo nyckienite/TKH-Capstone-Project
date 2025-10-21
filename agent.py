@@ -306,8 +306,8 @@ def main():
     print("Beginner Multi‑Persona AI Agent (script)")
     print("Mode:", "OPENAI" if OPENAI_API_KEY else "MOCK")
     print("\nExamples:")
-    print('  python notebook_agent.py --persona learner --ask "Give me a 2-week Docker+CI plan"')
-    print('  python notebook_agent.py --tool propose_project --args \'{"topic":"Model Monitoring","duration_weeks":2}\'')
+    print('  python agent.py --persona learner --ask "Give me a 2-week Docker+CI plan"')
+    print('  python agent.py --tool propose_project --args \'{"topic":"Model Monitoring","duration_weeks":2}\'')
 
 if __name__ == "__main__":
     main()
