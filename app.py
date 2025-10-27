@@ -26,6 +26,7 @@ st.set_page_config(
     layout="wide",
 )
 
+
 # ---------- SIDEBAR: Persona Info ----------
 st.sidebar.title("🧩 AI Profiles")
 
@@ -41,11 +42,11 @@ st.sidebar.write("**Style Rules:**")
 for rule in persona_obj.style_rules:
     st.sidebar.markdown(f"- {rule}")
 st.sidebar.write("---")
-st.sidebar.info("💡 Tip: Choose a persona here, then interact in the tabs on the main screen.")
+st.sidebar.info("💡 Tip: Choose a assistant here, then interact in the tabs on the main screen.")
 
 # ---------- MAIN PAGE ----------
 st.title(" TKH Bootcamp Data Science Dashboard")
-st.write("Interact with your personas (Educator, Learner, Employer) and run built-in tools with an intuitive interface.")
+st.write("Interact with your assistant (Educator, Learner, Employer) and run built-in tools with an intuitive interface.")
 
 tab1, tab2 = st.tabs(["💬 Chat with TKH Assistant", "🧰 Use a Tool"])
 
