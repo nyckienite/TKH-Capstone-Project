@@ -82,12 +82,20 @@ with tab1:
 # ==============================================================
 
 with tab2:
-    st.subheader("Run a Built-in Tool")
+    st.subheader("Run a Built-in Tool with AI")
 
+    st.markdown("""
+    Select a **tool** and enter its arguments below.  
+    The tool will first run using Python logic, then the **AI persona** will analyze, summarize, 
+    or enhance the output.
+    """)
+
+    # Select tool
     tool_names = list(use_tool.__globals__["TOOL_REGISTRY"].keys())
     tool_choice = st.selectbox("Choose a tool to run", tool_names)
 
-    st.markdown("Enter the tool arguments in JSON format (e.g., `{\"topic\": \"Model Monitoring\", \"duration_weeks\": 2}`).")
+    # Default JSON example
+    st.markdown("Enter the tool arguments in JSON format.")
     default_json = (
         '{"topic": "Model Monitoring", "duration_weeks": 2}'
         if tool_choice == "propose_project"
@@ -95,21 +103,50 @@ with tab2:
     )
     args_str = st.text_area("Arguments (JSON format)", value=default_json, height=150)
 
-    if st.button("Run Tool", use_container_width=True):
+    # AI persona selector (reuse same personas from Tab 1)
+    persona_selected_tool = st.selectbox(
+        "Choose which persona will interpret the tool output:",
+        ["educator", "learner", "employer"],
+        key="persona_tool"
+    )
+
+    if st.button("Run Tool with AI", use_container_width=True):
         try:
             args = json.loads(args_str) if args_str.strip() else {}
+
+            # Step 1 — Run the base tool
             with st.spinner(f"Running {tool_choice}..."):
-                result = use_tool(tool_choice, **args)
+                raw_result = use_tool(tool_choice, **args)
 
-            st.markdown("### 🧩 Tool Output")
-            st.json(result)
+            st.markdown("### ⚙️ Raw Tool Output")
+            st.json(raw_result)
 
-            # Add download button for tool output
-            tool_json = json.dumps(result, indent=2)
+            # Step 2 — Send result to the AI persona for analysis
+            with st.spinner("🧠 Asking AI persona for insights..."):
+                ai_prompt = (
+                    f"Here is the output from the `{tool_choice}` tool:\n"
+                    f"{json.dumps(raw_result, indent=2)}\n\n"
+                    f"As the {persona_selected_tool} persona, summarize or expand on this result "
+                    f"in a way that would help a student or practitioner apply it effectively."
+                )
+                ai_response = ask(persona_selected_tool, ai_prompt)
+
+            st.markdown("### 🤖 AI Persona Interpretation")
+            st.write(ai_response)
+
+            # Step 3 — Add download buttons
+            combined_output = {
+                "persona": persona_selected_tool,
+                "tool_name": tool_choice,
+                "args": args,
+                "raw_result": raw_result,
+                "ai_response": ai_response,
+            }
+
             st.download_button(
-                label="💾 Save Output as JSON",
-                data=tool_json,
-                file_name=f"{tool_choice}_output.json",
+                label="💾 Save Full AI Output (JSON)",
+                data=json.dumps(combined_output, indent=2),
+                file_name=f"{tool_choice}_{persona_selected_tool}_output.json",
                 mime="application/json",
             )
 
