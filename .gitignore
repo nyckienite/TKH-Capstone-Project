@@ -1,4 +1,12 @@
 __pycache__/
 .env
+<<<<<<< HEAD
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+=======
 venv/
 
+>>>>>>> origin/main
