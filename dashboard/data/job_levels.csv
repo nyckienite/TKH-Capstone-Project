@@ -1,0 +1,4 @@
+level,education,years_exp,skills,responsibility_weight
+Entry,BA/BS,0.5,Excel;SQL;Power BI,1
+Mid,BA/BS,2.5,SQL;Python;Power BI;A/B Testing,2
+Senior,BA/BS or MS,5.0,Python;SQL;Cloud;Leadership;Experimentation,3
