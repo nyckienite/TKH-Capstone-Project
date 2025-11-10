@@ -1,0 +1,4 @@
+platform,coverage_score,relevance_score
+LinkedIn,0.92,0.90
+Glassdoor,0.86,0.83
+BLS,0.60,0.70
