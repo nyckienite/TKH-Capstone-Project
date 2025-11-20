@@ -49,7 +49,7 @@ class LLMClient:
                 self._client = OpenAI(api_key=self.api_key)
                 self.mode = "OPENAI"
             except Exception as e:
-                print("[WARN] OpenAI init failed, using MOCK:", e)
+                logger.error(f"OpenAI init failed, using MOCK: {e}")
                 self._client = None
                 self.mode = "MOCK"
 
@@ -72,7 +72,7 @@ class LLMClient:
             )
             return resp.choices[0].message.content or ""
         except Exception as e:
-            print("[WARN] API call failed, switching to MOCK:", e)
+            logger.error(f"OpenAI init failed, using MOCK: {e}")
             self._client = None
             self.mode = "MOCK"
             return (
