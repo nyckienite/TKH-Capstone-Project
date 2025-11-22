@@ -7,7 +7,7 @@ Front-end dashboard that reads CSVs from `/data` using PapaParse and renders Plo
 - Serve locally:
   - Python 3: `python -m http.server 8000` → open http://localhost:8000/
 
-## Replace Data (keep filenames & headers)
+## Data Files
 - job_availability.csv — state,region,urban,postings
 - platform_coverage.csv — platform,coverage_score,relevance_score
 - job_levels.csv — level,education,years_exp,skills (semicolon-separated),responsibility_weight
