@@ -77,80 +77,96 @@ with tab1:
         else:
             st.warning("⚠️ Please enter a message before submitting.")
 
-# ==============================================================
-# 🧰 TAB 2: TOOL RUNNER
-# ==============================================================
+# ==============================================================  
+# 🧰 TAB 2: TOOL RUNNER (Prompt-Based Version)  
+# ==============================================================  
 
 with tab2:
     st.subheader("Run a Built-in Tool with AI")
 
     st.markdown("""
-    Select a **tool** and enter its arguments below.  
-    The tool will first run using Python logic, then the **AI persona** will analyze, summarize, 
-    or enhance the output.
+    Instead of entering JSON, just type a natural-language prompt.  
+    The AI will **interpret your prompt**, extract what the tool needs,  
+    run the tool, and then provide an enhanced explanation.
     """)
 
     # Select tool
     tool_names = list(use_tool.__globals__["TOOL_REGISTRY"].keys())
     tool_choice = st.selectbox("Choose a tool to run", tool_names)
 
-    # Default JSON example
-    st.markdown("Enter the tool arguments in JSON format.")
-    default_json = (
-        '{"topic": "Model Monitoring", "duration_weeks": 2}'
-        if tool_choice == "propose_project"
-        else "{}"
+    # Replace JSON input with natural language prompt
+    natural_prompt = st.text_area(
+        "Describe what you want the tool to do (natural language)",
+        placeholder="e.g., Create me a 2-week project about model monitoring with beginner-friendly tasks."
     )
-    args_str = st.text_area("Arguments (JSON format)", value=default_json, height=150)
 
-    # AI persona selector (reuse same personas from Tab 1)
+    # Persona selector
     persona_selected_tool = st.selectbox(
-        "Choose which persona will interpret the tool output:",
+        "Choose which persona will interpret the output:",
         ["educator", "learner", "employer"],
         key="persona_tool"
     )
 
     if st.button("Run Tool with AI", use_container_width=True):
         try:
-            args = json.loads(args_str) if args_str.strip() else {}
+        
+            with st.spinner("🧠 Interpreting your prompt..."):
+                convert_prompt = f"""
+                You are an AI that converts natural-language prompts into JSON arguments
+                for a tool called '{tool_choice}'.
 
-            # Step 1 — Run the base tool
-            with st.spinner(f"Running {tool_choice}..."):
+                User prompt:
+                \"\"\"{natural_prompt}\"\"\"
+
+                Return ONLY valid JSON.
+                """
+                json_args_str = ask(persona_selected_tool, convert_prompt)
+
+            args = json.loads(json_args_str)
+
+            
+            #Run the tool using the parsed arguments
+            
+            with st.spinner(f"Running {tool_choice} with interpreted arguments..."):
                 raw_result = use_tool(tool_choice, **args)
 
             st.markdown("### ⚙️ Raw Tool Output")
             st.json(raw_result)
 
-            # Step 2 — Send result to the AI persona for analysis
-            with st.spinner("🧠 Asking AI persona for insights..."):
+            #Persona interprets the tool output
+            
+            with st.spinner("🔍 Asking AI persona for insights..."):
                 ai_prompt = (
-                    f"Here is the output from the `{tool_choice}` tool:\n"
-                    f"{json.dumps(raw_result, indent=2)}\n\n"
-                    f"As the {persona_selected_tool} persona, summarize or expand on this result "
-                    f"in a way that would help a student or practitioner apply it effectively."
+                    f"Tool: {tool_choice}\n"
+                    f"Interpreted Arguments: {json.dumps(args, indent=2)}\n"
+                    f"Raw Output: {json.dumps(raw_result, indent=2)}\n\n"
+                    f"As the {persona_selected_tool} persona, explain, summarize, or enhance this output "
+                    f"in a way that would help a learner or practitioner."
                 )
                 ai_response = ask(persona_selected_tool, ai_prompt)
 
             st.markdown("### 🤖 AI Persona Interpretation")
             st.write(ai_response)
 
-            # Step 3 — Add download buttons
+            #Download output
+            
             combined_output = {
                 "persona": persona_selected_tool,
                 "tool_name": tool_choice,
-                "args": args,
+                "user_prompt": natural_prompt,
+                "interpreted_args": args,
                 "raw_result": raw_result,
                 "ai_response": ai_response,
             }
 
             st.download_button(
-                label="💾 Save Full AI Output (JSON)",
+                label="💾 Save Full Output (JSON)",
                 data=json.dumps(combined_output, indent=2),
                 file_name=f"{tool_choice}_{persona_selected_tool}_output.json",
                 mime="application/json",
             )
 
         except json.JSONDecodeError:
-            st.error("❌ Invalid JSON input. Please check your syntax.")
+            st.error("❌ The AI could not convert your prompt into valid JSON. Try rephrasing.")
         except Exception as e:
             st.error(f"⚠️ Error running tool: {e}")
