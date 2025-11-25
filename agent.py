@@ -1,8 +1,6 @@
 """
-Beginner Multi‑Persona AI Agent (Script version)
+Multi‑Persona AI Agent
 ------------------------------------------------
-This is the Python (.py) equivalent of the Jupyter notebook demo.
-
 Features:
 - Runs with or without OPENAI_API_KEY (MOCK mode if none)
 - Three personas: Educator, Learner, Employer
@@ -16,10 +14,17 @@ from __future__ import annotations
 import os
 import json
 import argparse
+
+from langchain_core.documents import Document
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import Chroma
+
 from dataclasses import dataclass
 from typing import List, Dict, Any, Optional
+from ragsjob import rag_search
 
-# Optional .env loading
+
+# Load .env file
 try:
     from dotenv import load_dotenv  # type: ignore
     load_dotenv()
@@ -28,9 +33,9 @@ except Exception:
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# ----------------------- LLM Client -----------------------
+#LLM Client Development
 
-DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+DEFAULT_MODEL = os.getenv("OPENAI_API_MODEL", "gpt-4o-mini")
 
 class LLMClient:
     """
@@ -82,7 +87,7 @@ class LLMClient:
                 "Response: API failed; now in MOCK mode."
             )
 
-# ----------------------- Personas -----------------------
+#LLM Personas Development
 
 @dataclass
 class Persona:
@@ -140,7 +145,7 @@ PERSONAS: Dict[str, Persona] = {
     "employer": EMPLOYER,
 }
 
-# ----------------------- Tools -----------------------
+#LLM Tools Development
 
 def propose_project(topic: str, duration_weeks: int = 2) -> Dict[str, Any]:
     return {
@@ -250,7 +255,7 @@ def screening_scorecard(role: str) -> Dict[str, Any]:
         "scales": {"0": "Not demonstrated", "1": "Basic", "2": "Good", "3": "Excellent"},
     }
 
-# ----------------------- Registry & helper APIs -----------------------
+#Tool Registry and helper APIs 
 
 TOOL_REGISTRY = {
     "propose_project": propose_project,
@@ -272,15 +277,33 @@ def use_tool(tool_name: str, **kwargs) -> Dict[str, Any]:
     except TypeError as e:
         return {"error": f"Bad arguments for {tool_name}: {e}"}
 
-def ask(persona_key: str, message: str, temperature: float = 0.4) -> str:
-    key = persona_key.strip().lower()
-    if key not in PERSONAS:
-        raise ValueError(f"Unknown persona '{persona_key}'. Try one of {list(PERSONAS.keys())}")
-    system = PERSONAS[key].system_prompt()
-    client = LLMClient()
-    return client.chat(system, message, temperature=temperature)
+def ask(persona_name: str, query: str) -> str:
+    persona = PERSONAS[persona_name]
 
-# ----------------------- CLI -----------------------
+    # retrieve RAG system
+    rag_context = rag_search(query)
+
+    system_prompt = f"""
+You are {persona.name}.
+Tone: {persona.tone}
+Goals: {persona.goals}
+Style Rules: {persona.style_rules}
+
+Here is relevant job data:
+{rag_context}
+"""
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": query},
+        ]
+    )
+
+    return response.choices[0].message["content"]
+
+#Model Execution
 
 def main():
     parser = argparse.ArgumentParser(description="Beginner Multi‑Persona AI Agent (script version)")
