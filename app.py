@@ -1,17 +1,11 @@
 # =========================================
-# app.py — Streamlit UI for your AI model
+# app.py — Streamlit UI for AI model
 # =========================================
-
-# If needed, install dependencies:
-# pip install streamlit python-dotenv openai
-
 import streamlit as st
 import json
-from io import StringIO
-from typing import Any, Dict, List
-import agent
 
-# ---------- IMPORT YOUR EXISTING BACKEND ----------
+
+# IMPORT EXISTING BACKEND
 
 from agent import (
     ask,
@@ -19,7 +13,7 @@ from agent import (
     PERSONAS,
 )
 
-# ---------- PAGE CONFIG ----------
+# PAGE CONFIG
 st.set_page_config(
     page_title="TKH Bootcamp Data Science Assistant",
     page_icon="🤖",
