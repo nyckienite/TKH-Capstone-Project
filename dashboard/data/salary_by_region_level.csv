@@ -1,0 +1,13 @@
+region,level,median
+Northeast,Entry,82000
+Northeast,Mid,104000
+Northeast,Senior,130000
+South,Entry,73000
+South,Mid,95000
+South,Senior,120000
+Midwest,Entry,75000
+Midwest,Mid,98000
+Midwest,Senior,123000
+West,Entry,90000
+West,Mid,115000
+West,Senior,145000

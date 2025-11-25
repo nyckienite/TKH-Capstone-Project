@@ -1,0 +1,13 @@
+state,region,urban,postings
+CA,West,true,1280
+NY,Northeast,true,1120
+TX,South,true,980
+FL,South,true,760
+IL,Midwest,true,620
+NC,South,false,370
+WA,West,true,510
+CO,West,false,320
+OH,Midwest,false,300
+GA,South,true,540
+AZ,West,false,260
+PA,Northeast,true,440
