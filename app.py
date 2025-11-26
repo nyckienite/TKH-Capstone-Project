@@ -118,7 +118,7 @@ with tab2:
 
             # Step 1 — Run the base tool
             with st.spinner(f"Running {tool_choice}..."):
-                raw_result = use_tool(tool_choice, **args)
+                raw_result = use_tool(tool_choice, **args) or {"status": "no output returned"}
 
             st.markdown("### ⚙️ Raw Tool Output")
             st.json(raw_result)
