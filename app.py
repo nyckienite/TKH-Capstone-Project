@@ -32,7 +32,7 @@ st.sidebar.title("🧩 AI Profiles")
 
 persona_selected = st.sidebar.selectbox("Select Persona", list(PERSONAS.keys()), index=0)
 
-persona_obj = PERSONAS[persona_selected]
+persona_obj = PERSONAS.get(persona_selected)
 st.sidebar.markdown(f"### 🎭 {persona_obj.name}")
 st.sidebar.write(f"**Tone:** {persona_obj.tone}")
 st.sidebar.write("**Goals:**")
