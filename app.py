@@ -136,7 +136,7 @@ with tab2:
                 ai_response = ask(persona_selected_tool, ai_prompt)
 
             st.markdown("### 🤖 AI Persona Interpretation")
-            st.write(ai_response)
+            st.write(str(ai_response))
 
             # Step 3 — Add download buttons
             combined_output = {
