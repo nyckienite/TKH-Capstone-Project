@@ -69,7 +69,7 @@ with tab1:
             st.write(response)
 
             # Add download button for chat output
-            json_data = json.dumps({"persona": persona_selected, "input": message, "response": response}, indent=2)
+            json_data = json.dumps({"persona": persona_selected, "input": message, "response": str(response)}, indent=2)
             st.download_button(
                 label="💾 Save Response as JSON",
                 data=json_data,
