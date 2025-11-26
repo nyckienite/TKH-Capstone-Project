@@ -64,7 +64,7 @@ with tab1:
     if st.button("Ask Persona", use_container_width=True):
         if message.strip():
             with st.spinner("Thinking..."):
-                response = ask(persona_selected, message)
+                response = st.cache_data()(ask)(persona_selected, message)
             st.markdown("### 🧠 AI Assistant Response")
             st.write(response)
 
