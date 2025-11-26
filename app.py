@@ -103,7 +103,8 @@ with tab2:
         if tool_choice == "propose_project"
         else "{}"
     )
-    args_str = st.text_area("Arguments (JSON format)", value=default_json, height=150)
+    args_str = st.text_area("Arguments (JSON format)", value=default_json, height=150).strip()
+
 
     # AI persona selector (reuse same personas from Tab 1)
     persona_selected_tool = st.selectbox(
