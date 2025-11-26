@@ -61,7 +61,7 @@ with tab1:
 
     message = st.text_area("Enter your message:", placeholder="e.g., Give me a 2-week plan for Docker + CI basics.")
 
-    if st.button("Ask Persona", use_container_width=True):
+    if st.button("Ask Persona", use_container_width=True) and len(message) < 5000:
         if message.strip():
             with st.spinner("Thinking..."):
                 response = st.cache_data()(ask)(persona_selected, message)
