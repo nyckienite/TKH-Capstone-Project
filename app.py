@@ -157,4 +157,4 @@ with tab2:
         except json.JSONDecodeError:
             st.error("❌ Invalid JSON input. Please check your syntax.")
         except Exception as e:
-            st.error(f"⚠️ Error running tool: {e}")
+            st.error(f"⚠️ Tool execution failed: {type(e).__name__}: {e}")
