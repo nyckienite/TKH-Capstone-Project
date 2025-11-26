@@ -114,7 +114,7 @@ with tab2:
 
     if st.button("Run Tool with AI", use_container_width=True):
         try:
-            args = json.loads(args_str) if args_str.strip() else {}
+            args = json.loads(args_str or "{}")
 
             # Step 1 — Run the base tool
             with st.spinner(f"Running {tool_choice}..."):
