@@ -126,6 +126,8 @@ with tab2:
             # Step 2 — Send result to the AI persona for analysis
             with st.spinner("🧠 Asking AI persona for insights..."):
                 ai_prompt = (
+                    "Analyze the following tool output safely and clearly.\n\n"
+
                     f"Here is the output from the `{tool_choice}` tool:\n"
                     f"{json.dumps(raw_result, indent=2)}\n\n"
                     f"As the {persona_selected_tool} persona, summarize or expand on this result "
