@@ -4,20 +4,26 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Data Analyst Job Insights • CSV Dashboard</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="assets/styles.css">
+
+  <!-- Libraries -->
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <header class="header">
-    <div class="brand">Data Analyst Job Insights (CSV)</div>
+    <div class="brand">Data Analyst Job Insights by Data Alchemists (CSV)</div>
     <div class="small">Prototype • HTML/JS (no backend)</div>
   </header>
+
   <div class="container">
     <aside class="sidebar">
       <div class="nav-title">Pages</div>
       <nav class="nav">
-        <a href="#page1" class="active">1. Jobs & Platforms</a>
+        <a href="#home" class="active">0. Overview</a>
+        <a href="#page1">1. Jobs & Platforms</a>
         <a href="#page2">2. Levels & Trends</a>
         <a href="#page3">3. AI & Role Evolution</a>
         <a href="#page4">4. Skills Analysis</a>
@@ -25,74 +31,280 @@
         <a href="#page6">6. Education & Candidate Fit</a>
       </nav>
     </aside>
+
     <main class="main">
-      <div class="page active" id="page1">
-        <div class="card"><h2>1) Job Availability & Platforms</h2>
-        <p class="small">Reads CSVs from <code>/data</code>. Replace them with your own and keep headers.</p></div>
+      <!-- HOME / OVERVIEW -->
+      <div class="page active" id="home">
+        <div class="card">
+          <h2>Data Analyst Job Insights – Overview</h2>
+          <p class="small">
+            This dashboard is a front-end prototype that reads two CSV files:
+            <code>Cleaned_DS_Jobs_enriched.csv</code> (job postings) and
+            <code>Programs.csv</code> (education programs / bootcamps).
+            It is designed to help educators, learners, and employers quickly
+            explore how data roles show up in the job market.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>How to Use the Dashboard</h3>
+          <ul class="small" style="margin:6px 0 0;padding-left:18px;line-height:1.5;">
+            <li>Each item in the left-hand sidebar opens a different question about the data job market.</li>
+            <li>All charts are powered by the CSV files in the <code>/data</code> folder. You can swap in your own
+                data as long as you keep the same column names.</li>
+            <li>Hover over bars and points to see exact values. You can also zoom and pan in most charts.</li>
+            <li>Some charts include short notes when the current dataset is missing certain fields
+                (for example, posting dates or job platforms). Those are hints for future data collection.</li>
+          </ul>
+        </div>
+
         <div class="grid">
-          <div class="card col-6"><h3>Postings by State</h3><div id="chart_state_postings"></div></div>
-          <div class="card col-6"><h3>Urban vs Non-Urban</h3><div id="chart_urban"></div></div>
-          <div class="card col-12"><h3>Platform Coverage vs Relevance</h3><div id="chart_platforms"></div></div>
+          <div class="card col-6">
+            <h3>Page 1 – Jobs & Platforms</h3>
+            <p class="small">
+              Shows where jobs are located and which skills show up most by state. Use this page to answer:
+              <em>“Where are the jobs and what skills show up the most by region?”</em>
+            </p>
+          </div>
+          <div class="card col-6">
+            <h3>Page 2 – Levels & Trends</h3>
+            <p class="small">
+              Compares junior vs mid vs senior roles using the <code>seniority</code> field, and uses description
+              length as a rough “responsibility index.” This page answers:
+              <em>“How do expectations change as roles get more senior?”</em>
+            </p>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card col-6">
+            <h3>Page 3 – AI & Evolving Roles</h3>
+            <p class="small">
+              Looks at how often AI is mentioned in job descriptions and how that lines up with salary, role type,
+              and work setting (remote / hybrid / onsite, inferred from text). This page answers:
+              <em>“What happens to salary and role shape when AI shows up in the posting?”</em>
+            </p>
+          </div>
+          <div class="card col-6">
+            <h3>Page 4 – Skills Analysis</h3>
+            <p class="small">
+              Uses the binary skill flags (Python, Excel, Hadoop, Spark, AWS, Tableau, Big Data) to find the most
+              common skills, which skills line up with higher average salaries, and which skill combinations travel
+              together. This page answers:
+              <em>“Which skills and bundles of skills are most rewarded in this dataset?”</em>
+            </p>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card col-6">
+            <h3>Page 5 – Salaries & Compensation</h3>
+            <p class="small">
+              Breaks out median salary by <code>job_state</code>, seniority level, and industry, and gives a rough
+              view of how broad the skill requirements are by company size. This page answers:
+              <em>“How do pay and expectations change by region, industry, and company size?”</em>
+            </p>
+          </div>
+          <div class="card col-6">
+            <h3>Page 6 – Education & Candidate Fit</h3>
+            <p class="small">
+              Compares industry demand to what programs teach (from <code>Programs.csv</code>), shows a rough
+              industry–education alignment score, and lets a user type their own skills to see an estimated fit
+              against postings and a sample program like TKH. This page answers:
+              <em>“Where are programs strong, where are there gaps, and how might an individual candidate fit?”</em>
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Notes About the Sample Data</h3>
+          <ul class="small" style="margin:6px 0 0;padding-left:18px;line-height:1.5;">
+            <li>The job data is based on a cleaned Glassdoor-style dataset for data roles. It includes salary,
+                state, company size, industry, and binary flags for key skills like Python, Excel, and Tableau.</li>
+            <li>The program data is a mock snapshot of several bootcamps and degrees (including TKH) with a list of
+                skills taught. It is only meant to illustrate what an education-alignment view could look like.</li>
+            <li>Where the current CSVs don’t include certain fields (for example, posting month or job platform),
+                the dashboard shows a short message instead of a fake number. Those are intentional gaps to guide
+                future data collection.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PAGE 1 -->
+      <div class="page" id="page1">
+        <div class="card">
+          <h2>1) Job Availability & Platforms</h2>
+          <p class="small">
+            Reads CSVs from <code>/data</code>. Replace them with your own and keep headers.
+          </p>
+        </div>
+        <div class="grid">
+          <div class="card col-6">
+            <h3>Postings by State</h3>
+            <div id="chart_state_postings"></div>
+          </div>
+          <div class="card col-6">
+            <h3>Urban vs Non-Urban</h3>
+            <div id="chart_urban"></div>
+          </div>
+          <div class="card col-12">
+            <h3>Platform Coverage vs Relevance</h3>
+            <div id="chart_platforms"></div>
+          </div>
+          <div class="card col-12">
+            <h3>Top Skills by Region</h3>
+            <div id="chart_region_skills"></div>
+          </div>
         </div>
         <div class="card">
           <h3>Platform Recommendation (Heuristic)</h3>
+          <p class="small">
+            Type your skills and get a rough suggestion of how often those skills show up in postings.
+          </p>
           <input class="input" id="skillsInput" placeholder="e.g., SQL, Python, Power BI">
           <button class="btn" id="btnRecommend">Recommend Platform</button>
-          <div id="llmReco" class="card" style="margin-top:10px;"></div>
+          <div id="llmReco" class="card nested-card"></div>
         </div>
       </div>
 
+      <!-- PAGE 2 -->
       <div class="page" id="page2">
-        <div class="card"><h2>2) Job Levels & Trends</h2></div>
+        <div class="card">
+          <h2>2) Job Levels & Trends</h2>
+        </div>
         <div class="grid">
-          <div class="card col-6"><h3>Education & Experience</h3><div id="chart_level_exp"></div></div>
-          <div class="card col-6"><h3>Responsibilities Index</h3><div id="chart_responsibility"></div></div>
-          <div class="card col-12"><h3>Monthly Postings Trend</h3><div id="chart_trend"></div></div>
+          <div class="card col-6">
+            <h3>Education & Experience by Level</h3>
+            <div id="chart_level_exp"></div>
+          </div>
+          <div class="card col-6">
+            <h3>Responsibilities Index by Level</h3>
+            <div id="chart_responsibility"></div>
+          </div>
+          <div class="card col-12">
+            <h3>Monthly Postings Trend</h3>
+            <div id="chart_trend"></div>
+          </div>
         </div>
       </div>
 
+      <!-- PAGE 3 -->
       <div class="page" id="page3">
-        <div class="card"><h2>3) AI & Evolving Roles</h2></div>
+        <div class="card">
+          <h2>3) AI & Evolving Roles</h2>
+        </div>
         <div class="grid">
-          <div class="card col-6"><h3>AI Mentions vs Salary Index</h3><div id="chart_ai_mentions"></div></div>
-          <div class="card col-6"><h3>Role Overlap</h3><div id="chart_overlap"></div></div>
+          <div class="card col-6">
+            <h3>AI Mentions vs Salary Index</h3>
+            <div id="chart_ai_mentions"></div>
+          </div>
+          <div class="card col-6">
+            <h3>Role Overlap</h3>
+            <div id="chart_overlap"></div>
+          </div>
+          <div class="card col-12">
+            <h3>Remote vs Onsite Skill Patterns</h3>
+            <div id="chart_remote_skills"></div>
+          </div>
         </div>
       </div>
 
+      <!-- PAGE 4 -->
       <div class="page" id="page4">
-        <div class="card"><h2>4) Skills Analysis</h2></div>
+        <div class="card">
+          <h2>4) Skills Analysis</h2>
+        </div>
         <div class="grid">
-          <div class="card col-8"><h3>Skill Popularity Over Time</h3><div id="chart_skills_time"></div></div>
-          <div class="card col-4"><h3>Top Skill (Latest)</h3><div id="chart_top_skill"></div></div>
+          <div class="card col-8">
+            <h3>Skill Popularity Over Time</h3>
+            <div id="chart_skills_time"></div>
+          </div>
+          <div class="card col-4">
+            <h3>Top Skill (Latest)</h3>
+            <div id="chart_top_skill"></div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="card col-6">
+            <h3>Skills vs Median Salary</h3>
+            <div id="chart_skill_salary"></div>
+          </div>
+          <div class="card col-6">
+            <h3>Top Skill Combinations & Salary</h3>
+            <div id="chart_skill_combos_salary"></div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="card col-12">
+            <h3>Programming Languages by Role</h3>
+            <div id="chart_lang_role_industry"></div>
+          </div>
         </div>
       </div>
 
+      <!-- PAGE 5 -->
       <div class="page" id="page5">
-        <div class="card"><h2>5) Salaries & Compensation</h2></div>
+        <div class="card">
+          <h2>5) Salaries & Compensation</h2>
+        </div>
         <div class="grid">
-          <div class="card col-7"><h3>Median Salary by Region & Level</h3><div id="chart_salary_region"></div></div>
-          <div class="card col-5"><h3>Median Salary by Industry</h3><div id="chart_salary_industry"></div></div>
-          <div class="card col-12"><h3>Openness to Nontraditional</h3><div id="chart_openness"></div></div>
+          <div class="card col-7">
+            <h3>Median Salary by Region & Level</h3>
+            <div id="chart_salary_region"></div>
+          </div>
+          <div class="card col-5">
+            <h3>Median Salary by Industry</h3>
+            <div id="chart_salary_industry"></div>
+          </div>
+          <div class="card col-12">
+            <h3>Openness to Nontraditional Candidates</h3>
+            <div id="chart_openness"></div>
+          </div>
+          <div class="card col-12">
+            <h3>Company Size vs Breadth of Skills</h3>
+            <div id="chart_company_size_skills"></div>
+          </div>
         </div>
       </div>
 
+      <!-- PAGE 6 -->
       <div class="page" id="page6">
-        <div class="card"><h2>6) Education & Candidate Fit</h2></div>
+        <div class="card">
+          <h2>6) Education & Candidate Fit</h2>
+        </div>
         <div class="grid">
-          <div class="card col-6"><h3>Program Alignment Radar</h3><div id="chart_alignment"></div></div>
+          <div class="card col-6">
+            <h3>Program Alignment Radar</h3>
+            <div id="chart_alignment"></div>
+          </div>
           <div class="card col-6">
             <h3>Candidate Fit Simulator</h3>
+            <p class="small">
+              Enter your skills to see a rough fit score against job postings and an example program.
+            </p>
             <input class="input" id="candidateSkills" placeholder="e.g., SQL, Python, Power BI, Communication">
-            <div style="margin-top:10px;">
+            <div class="btn-row">
               <button class="btn" id="btnFit">Estimate Fit</button>
               <button class="btn secondary" id="btnFitTKH">Estimate Fit vs TKH</button>
             </div>
-            <div id="fitResult" class="card" style="margin-top:12px;"></div>
+            <div id="fitResult" class="card nested-card"></div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="card col-6">
+            <h3>Taught vs Demanded Skills</h3>
+            <div id="chart_taught_vs_demand"></div>
+          </div>
+          <div class="card col-6">
+            <h3>Industry Education Gap</h3>
+            <div id="chart_industry_gap"></div>
           </div>
         </div>
       </div>
     </main>
   </div>
+
+  <!-- App logic -->
   <script src="scripts/app.js"></script>
 </body>
 </html>

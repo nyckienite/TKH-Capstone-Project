@@ -15,5 +15,3 @@ Interactive figures (HTML):
 - figures/html/Q2_Top_Skills_Frequency.html
 - figures/html/Q3_Emerging_Skills_Trend.html
 - figures/html/Q4_Correlation_Heatmap.html
-
-Tip: Enable GitHub Pages on this repo to serve the HTML files, or open them locally.
