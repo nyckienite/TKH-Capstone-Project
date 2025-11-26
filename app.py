@@ -120,7 +120,7 @@ with tab2:
             with st.spinner(f"Running {tool_choice}..."):
                 raw_result = use_tool(tool_choice, **args) or {"status": "no output returned"}
 
-            st.markdown("### ⚙️ Raw Tool Output")
+            st.markdown("### ⚙️ Raw Tool Output (Python Result)")
             st.json(raw_result)
 
             # Step 2 — Send result to the AI persona for analysis
