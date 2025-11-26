@@ -93,7 +93,7 @@ with tab2:
     """)
 
     # Select tool
-    tool_names = list(use_tool.__globals__["TOOL_REGISTRY"].keys())
+    tool_names = list(use_tool.__globals__.get("TOOL_REGISTRY", {}).keys())
     tool_choice = st.selectbox("Choose a tool to run", tool_names)
 
     # Default JSON example
