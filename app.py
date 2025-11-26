@@ -33,7 +33,9 @@ st.sidebar.title("🧩 AI Profiles")
 persona_selected = st.sidebar.selectbox("Select Persona", list(PERSONAS.keys()), index=0)
 
 persona_obj = PERSONAS.get(persona_selected)
-st.sidebar.markdown(f"### 🎭 {persona_obj.name}")
+if not persona_obj:
+    st.sidebar.error("Persona config missing.")
+    st.stop()
 st.sidebar.write(f"**Tone:** {persona_obj.tone}")
 st.sidebar.write("**Goals:**")
 for g in persona_obj.goals:
