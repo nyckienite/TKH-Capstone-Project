@@ -32,7 +32,7 @@ Cleans, enriches, and documents data for the Power BI dashboard.
 **Insights & Recommendations**  
 Synthesizes findings into takeaways for educators, learners, and employers.  
 
-:robot_face: **Multi-Persona AI Agent**  
+:robot: **Multi-Persona AI Agent**  
 To support the project, we built a **Beginner Multi-Persona AI Agent** with personas for:  
 - **Educators**  
 - **Learners**  
