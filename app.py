@@ -25,10 +25,12 @@ st.set_page_config(
 # ---------- SIDEBAR: Persona Info ----------
 st.sidebar.title("🧩 AI Profiles")
 
-persona_selected = st.sidebar.selectbox("Select Persona", list(PERSONAS.keys()))
+persona_selected = st.sidebar.selectbox("Select Persona", list(PERSONAS.keys()), index=0)
 
-persona_obj = PERSONAS[persona_selected]
-st.sidebar.markdown(f"### 🎭 {persona_obj.name}")
+persona_obj = PERSONAS.get(persona_selected)
+if not persona_obj:
+    st.sidebar.error("Persona config missing.")
+    st.stop()
 st.sidebar.write(f"**Tone:** {persona_obj.tone}")
 st.sidebar.write("**Goals:**")
 for g in persona_obj.goals:
@@ -54,15 +56,15 @@ with tab1:
 
     message = st.text_area("Enter your message:", placeholder="e.g., Give me a 2-week plan for Docker + CI basics.")
 
-    if st.button("Ask Persona", use_container_width=True):
+    if st.button("Ask Persona", use_container_width=True) and len(message) < 5000:
         if message.strip():
             with st.spinner("Thinking..."):
-                response = ask(persona_selected, message)
+                response = st.cache_data()(ask)(persona_selected, message)
             st.markdown("### 🧠 AI Assistant Response")
             st.write(response)
 
             # Add download button for chat output
-            json_data = json.dumps({"persona": persona_selected, "input": message, "response": response}, indent=2)
+            json_data = json.dumps({"persona": persona_selected, "input": message, "response": str(response)}, indent=2)
             st.download_button(
                 label="💾 Save Response as JSON",
                 data=json_data,
@@ -152,5 +154,4 @@ with tab2:
             st.error("❌ Invalid JSON input. Please check your syntax.")
         except Exception as e:
             st.error(f"⚠️ Tool execution failed: {type(e).__name__}: {e}")
-
 

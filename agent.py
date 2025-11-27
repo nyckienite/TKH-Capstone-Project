@@ -18,15 +18,15 @@ import json
 import argparse
 from openai import OpenAI
 from ragsjob import rag_search
-
 import logging
+from dataclasses import dataclass
+from typing import List, Dict, Any, Optional
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s"
 )
 logger = logging.getLogger(__name__)
-from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
 
 # Optional .env loading
 try:
