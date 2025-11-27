@@ -1,6 +1,8 @@
 """
-Multi‑Persona AI Agent
+Beginner Multi‑Persona AI Agent (Script version)
 ------------------------------------------------
+This is the Python (.py) equivalent of the Jupyter notebook demo.
+
 Features:
 - Runs with or without OPENAI_API_KEY (MOCK mode if none)
 - Three personas: Educator, Learner, Employer
@@ -14,28 +16,32 @@ from __future__ import annotations
 import os
 import json
 import argparse
-
-from langchain_core.documents import Document
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
-
-from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
+from openai import OpenAI
 from ragsjob import rag_search
 
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
+logger = logging.getLogger(__name__)
+from dataclasses import dataclass
+from typing import List, Dict, Any, Optional
 
-# Load .env file
+# Optional .env loading
 try:
     from dotenv import load_dotenv  # type: ignore
     load_dotenv()
 except Exception:
     pass
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-#LLM Client Development
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-DEFAULT_MODEL = os.getenv("OPENAI_API_MODEL", "gpt-4o-mini")
+
+# ----------------------- LLM Client -----------------------
+
+DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
 class LLMClient:
     """
@@ -54,7 +60,7 @@ class LLMClient:
                 self._client = OpenAI(api_key=self.api_key)
                 self.mode = "OPENAI"
             except Exception as e:
-                print("[WARN] OpenAI init failed, using MOCK:", e)
+                logger.error(f"OpenAI init failed, using MOCK: {e}")
                 self._client = None
                 self.mode = "MOCK"
 
@@ -77,7 +83,7 @@ class LLMClient:
             )
             return resp.choices[0].message.content or ""
         except Exception as e:
-            print("[WARN] API call failed, switching to MOCK:", e)
+            logger.error(f"OpenAI init failed, using MOCK: {e}")
             self._client = None
             self.mode = "MOCK"
             return (
@@ -87,7 +93,7 @@ class LLMClient:
                 "Response: API failed; now in MOCK mode."
             )
 
-#LLM Personas Development
+# ----------------------- Personas -----------------------
 
 @dataclass
 class Persona:
@@ -145,7 +151,7 @@ PERSONAS: Dict[str, Persona] = {
     "employer": EMPLOYER,
 }
 
-#LLM Tools Development
+# ----------------------- Tools -----------------------
 
 def propose_project(topic: str, duration_weeks: int = 2) -> Dict[str, Any]:
     return {
@@ -255,7 +261,7 @@ def screening_scorecard(role: str) -> Dict[str, Any]:
         "scales": {"0": "Not demonstrated", "1": "Basic", "2": "Good", "3": "Excellent"},
     }
 
-#Tool Registry and helper APIs 
+# ----------------------- Registry & helper APIs -----------------------
 
 TOOL_REGISTRY = {
     "propose_project": propose_project,
@@ -277,33 +283,38 @@ def use_tool(tool_name: str, **kwargs) -> Dict[str, Any]:
     except TypeError as e:
         return {"error": f"Bad arguments for {tool_name}: {e}"}
 
-def ask(persona_name: str, query: str) -> str:
-    persona = PERSONAS[persona_name]
 
-    # retrieve RAG system
-    rag_context = rag_search(query)
+def ask(persona_key: str, message: str) -> str:
+    persona = PERSONAS[persona_key]
 
     system_prompt = f"""
-You are {persona.name}.
+You are the {persona.name}.
 Tone: {persona.tone}
 Goals: {persona.goals}
-Style Rules: {persona.style_rules}
+Style rules: {persona.style_rules}
+"""
 
-Here is relevant job data:
+    rag_context = rag_search(message)
+
+    final_prompt = f"""
+Relevant knowledge:
 {rag_context}
+
+User message:
+{message}
 """
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": query},
+            {"role": "user", "content": final_prompt}
         ]
     )
 
-    return response.choices[0].message["content"]
+    return response.choices[0].message.content
 
-#Model Execution
+# ----------------------- CLI -----------------------
 
 def main():
     parser = argparse.ArgumentParser(description="Beginner Multi‑Persona AI Agent (script version)")
