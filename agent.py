@@ -16,14 +16,17 @@ from __future__ import annotations
 import os
 import json
 import argparse
+from openai import OpenAI
+from ragsjob import rag_search
 import logging
+from dataclasses import dataclass
+from typing import List, Dict, Any, Optional
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s"
 )
 logger = logging.getLogger(__name__)
-from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
 
 # Optional .env loading
 try:
@@ -32,7 +35,9 @@ try:
 except Exception:
     pass
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 
 # ----------------------- LLM Client -----------------------
 
@@ -278,13 +283,36 @@ def use_tool(tool_name: str, **kwargs) -> Dict[str, Any]:
     except TypeError as e:
         return {"error": f"Bad arguments for {tool_name}: {e}"}
 
-def ask(persona_key: str, message: str, temperature: float = 0.4) -> str:
-    key = persona_key.strip().lower()
-    if key not in PERSONAS:
-        raise ValueError(f"Unknown persona '{persona_key}'. Try one of {list(PERSONAS.keys())}")
-    system = PERSONAS[key].system_prompt()
-    client = LLMClient()
-    return client.chat(system, message, temperature=temperature)
+
+def ask(persona_key: str, message: str) -> str:
+    persona = PERSONAS[persona_key]
+
+    system_prompt = f"""
+You are the {persona.name}.
+Tone: {persona.tone}
+Goals: {persona.goals}
+Style rules: {persona.style_rules}
+"""
+
+    rag_context = rag_search(message)
+
+    final_prompt = f"""
+Relevant knowledge:
+{rag_context}
+
+User message:
+{message}
+"""
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": final_prompt}
+        ]
+    )
+
+    return response.choices[0].message.content
 
 # ----------------------- CLI -----------------------
 

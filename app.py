@@ -2,14 +2,9 @@
 # app.py — Streamlit UI for your AI model
 # =========================================
 
-# If needed, install dependencies:
-# pip install streamlit python-dotenv openai
 
 import streamlit as st
 import json
-from io import StringIO
-from typing import Any, Dict, List
-import agent
 
 # ---------- IMPORT YOUR EXISTING BACKEND ----------
 
@@ -159,3 +154,4 @@ with tab2:
             st.error("❌ Invalid JSON input. Please check your syntax.")
         except Exception as e:
             st.error(f"⚠️ Tool execution failed: {type(e).__name__}: {e}")
+
