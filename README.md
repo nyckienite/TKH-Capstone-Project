@@ -3,13 +3,14 @@
 **Program**: The Knowledge House — Data Science Innovation Fellowship  
 
 :compass: **Project Overview**
-This project analyzes whether today’s AI/Data job market aligns with what education programs teach. Using job postings, curriculum datasets, and skills-matching data, our team explored skill demand, education requirements, and industry gaps.  
+This project analyzes whether today’s AI/Data job market aligns with what education programs teach. Using job postings, curriculum datasets, and skills-matching data, our team explored skill demand, education requirements, and industry gaps.  This project transforms how AI agent can help learners, educators, and employers with the current job market demands. Within the AI agent, there are three personas any user can utilize to gain feedback. The educator persona help schools and/or bootcamps make their lessons match what jobs are actually seeking in the current workforce. It should be able to scan real job postings, pull the most in-demand tools and skills and identify which ones aren’t showing up in the current curriculum. For learners, it acts as a career coach: analyzing their existing skills, showing what they need to learn for specific roles, and determining if they qualify for a job. Lastly the employer persona can be a quick snapshot that shows where education and hiring aren’t in alignment. It should highlight which skills companies are seeking that bootcamps may not be teaching. This could potentially be used to build partnerships with schools or used internally for upskilling.
+
 
 The project includes:  
+- A multi-page **HTML dashboard visualizing key insights** from real-world job data
+- A **custom multi-persona AI Agent** executed via Streamlit
 - **6 structured workbooks** for targeted EDA  
-- A **custom multi-persona AI Agent**  
-- A multi-page **dashboard** visualizing key insights  
-- A cleaned and enriched dataset powering all analyses  
+- A Kanban board to manage weekly milestone requirements 
 
 :books: **The Six Workbooks**  
 Each workbook focuses on a major research question:  
@@ -90,3 +91,20 @@ Key takeaways:
 - The value of strong documentation and team coordination  
 - How AI tools can streamline analysis and enhance learning  
 - The gap between employer expectations and formal education offerings
+
+
+Prerequisites
+Python Version: 3.8+
+Editor: VS Code (or any preferred code editor)
+Installation Steps
+Clone the Repository
+git clone https://github.com/nyckienite/TKH-Capstone-Project.git
+In order to run the project:
+1. ` python3 -m venv venv`
+2. ` source env/bin/activate` #Mac or ` venv\Scripts\activate` #Windows
+3. ` pip install -r requirements.txt`
+4. ` streamlit run app.py`
+
+API keys and sensitive information are stored in .env files
+LearnSync Team: Alyssa, Akisha, Nicole, Dontaye and Adewale
+Project Repository: https://github.com/nyckienite/TKH-Capstone-Project
