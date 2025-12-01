@@ -1,5 +1,5 @@
 # =========================================
-# app.py — Streamlit UI for your AI model
+# app.py — Streamlit UI for AI model
 # =========================================
 
 
