@@ -101,7 +101,7 @@ Clone the Repository
 git clone https://github.com/nyckienite/TKH-Capstone-Project.git
 In order to run the project:
 1. ` python3 -m venv venv`
-2. ` source env/bin/activate` #Mac or ` venv\Scripts\activate` #Windows
+2. ` source venv/bin/activate` #Mac or ` venv\Scripts\activate` #Windows
 3. ` pip install -r requirements.txt`
 4. ` streamlit run app.py`
 
