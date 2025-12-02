@@ -105,6 +105,6 @@ In order to run the project:
 3. ` pip install -r requirements.txt`
 4. ` streamlit run app.py`
 
-API keys and sensitive information are stored in .env files
+API keys and sensitive information are stored in .env files. Use .env_example as a guide to set up your API keys.
 LearnSync Team: Alyssa, Akisha, Nicole, Dontaye and Adewale
 Project Repository: https://github.com/nyckienite/TKH-Capstone-Project
